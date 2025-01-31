@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  xmlns:p="http://primefaces.org/ui"
+  >
+  <!-- Interview CRUD View -->
+
+  <f:metadata>
+    <!-- Use our knowledge of JSF phases to ask controller to load/refresh its model list -->
+    <f:viewAction action="#{interviewController.loadInterviews()}" phase="UPDATE_MODEL_VALUES" /> 
+  </f:metadata>
+
+  <h:head>
+  	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		crossorigin="anonymous" />
+  	<link href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
+		type="text/css" rel="stylesheet" crossorigin="anonymous" />
+	<link
+		href="https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css"
+		type="text/css" rel="stylesheet" crossorigin="anonymous" />
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		crossorigin="anonymous" />
+	<h:outputStylesheet name="primefaces.css" />
+    <h:outputScript name="primefaces.js" />
+   
+    <!-- Title of tab/window in browser -->
+    <title>#{uiconsts['viewTitle']}</title>
+    <!-- Modern front-end artifacts such as CSS, JavaScript, etc. -->
+    <!-- Misc. table styles -->
+     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      h2 {
+        color: #333;
+        text-align: center;
+      }
+      h:form {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th {
+        background-color: #007BF0;
+        color: #fff;
+        padding: 12px;
+        text-align: left;
+      }
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+    .button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+      .summary-text {
+	    max-height: 50px; /* Show only two lines initially */
+	    overflow: hidden;
+	    display: inline-block;
+	    transition: max-height 0.3s ease;
+		}
+
+		.summary-text.expanded {
+		    max-height: none; /* Show full height when expanded */
+		}
+       .button:hover {
+    background-color: #0056b3;
+    color:white;
+     text-decoration: none;
+  }
+      .content-column {
+        width: 300px; 
+        word-wrap: break-word; 
+      }
+      caption {
+        margin: 10px 0;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+	.button-container {
+	    display: flex;
+	    justify-content: space-between;
+	    gap: 10px; /* Space between the two buttons */
+	    margin-top: 5px; /* Adjust as needed */
+	}
+	.generate-summary-button {
+    margin-left: auto; /* Pushes the "Generate Summary" button to the far right */
+	}
+	.ui-button:disabled {
+    background-color: #d3d3d3; /* Light grey background */
+    color: #a9a9a9; /* Dark grey text */
+    cursor: not-allowed; /* Make cursor show as not allowed */
+	}
+	.ui-dialog {
+    z-index: 10000 !important;
+}
+	
+    </style>
+  </h:head>
+  <h:body>
+   <h2>#{uiconsts['viewTitle']}</h2>
+    <br />
+    <h:form>
+       <!-- JavaScript onclick-handler cannot use 'map-style' uiconsts['something'], use 'properties-style'  -->
+	    <div style="display: flex; justify-content: space-between; align-items: center;">       
+	       <h:commandLink   styleClass="button" action="index.xhtml?faces-redirect=true">	       	
+	       <i class="fa fa-home" />
+	       <!--  --><h:outputText value="Main page"/>
+	       </h:commandLink>
+	       <h:commandLink  styleClass="button" action="#{interviewController.navigateToAddForm()}">
+	       	<i class="fas fa-plus" />
+	       	<h:outputText value="#{uiconsts['addButtonLabel']}"/>
+	       	</h:commandLink>
+		</div>
+		
+		
+       <p/>
+       <h:dataTable value="#{interviewController.interviews}" var="interview"
+         styleClass="table table-hover">
+         <h:column>
+           <f:facet name="header">#{uiconsts['columnLabel_Id']}</f:facet>
+           <h:outputText value="#{interview.id}"/>
+         </h:column>
+         <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_Name']}</f:facet>
+             <h:outputText value="#{interview.firstName} #{interview.lastName}"/>
+         </h:column>
+        <!--  <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_FirstName']}</f:facet>
+             <h:outputText value="#{interview.firstName}"/>
+         </h:column> -->
+         <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_Email']}</f:facet>
+             <h:outputText value="#{interview.email}"/>
+         </h:column>
+         <!-- <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_PhoneNumber']}</f:facet>
+             <h:outputText value="#{interview.phoneNumber}"/>
+         </h:column> -->
+         <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_Specialty']}</f:facet>
+             <h:outputText value="#{interview.specialty}"/>
+         </h:column>
+        <!--    <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_Content']}</f:facet>
+             <h:outputText value="#{interview.content}"/>
+         </h:column> 
+          <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_Summary']}</f:facet>
+             <h:outputText value="#{interviewController.getFormattedSummary(interview)}" escape="false"/>
+         </h:column>
+         --> 
+         <!--//-->
+        <h:column>
+		    <f:facet name="header">Summary</f:facet>
+		
+		    <!-- Display 'Please generate the summary' when summary is empty 
+		    <h:outputText value="Please generate the summary" 
+		                  rendered="#{empty interview.summary}" 
+		                  styleClass="empty-summary-message" />-->
+		
+		    <!-- Display the summary text when it is not empty -->
+		    <h:outputText id="summaryText" 
+		                  value="#{interviewController.getFormattedSummary(interview)}" 
+		                  escape="false" 
+		                  class="summary-text #{interview.showFullSummary ? 'expanded' : ''}" 
+		                  />
+		       <h:outputText value="There is no summary available.Please generate a summary!" 
+                rendered="#{empty interview.summary}" 
+                style="color: #888; font-style: italic;" />           
+		
+		    <!-- View More / View Less button, only rendered when summary is not empty -->
+		    
+		<h:panelGroup layout="block" styleClass="button-container">
+			    <h:commandButton id="summaryButton" 
+			                     value="#{interview.showFullSummary ? 'View Less' : 'View More'}" 
+			                     actionListener="#{interviewController.toggleSummary(interview.id)}" 
+			                     rendered="#{not empty interview.summary}" 
+			                     ajax="true"/>
+			                     
+			        <h:commandButton value="Generate" styleClass="button" 
+			                     action="#{interviewController.goToSummaryOptionsPage(interview.id)}" 
+			                     type="submit"  style="margin-left: auto;"/>
+			                    
+						   
+			</h:panelGroup>
+
+		</h:column>
+
+         <h:column>
+             <f:facet name="header">#{uiconsts['columnLabel_Created']}</f:facet>
+             <h:outputText value="#{interview.created}"/>
+         </h:column>
+         <!-- 
+         Action column 
+         -->
+         <h:column>
+           	<f:facet name="header">#{uiconsts['columnLabel_Action']}</f:facet>
+           	<h:commandLink 
+           	action = "#{interviewController.navigateToUpdateForm(interview.id)}">
+           	 <h:panelGroup layout="inline" style="display: flex; align-items: center;">
+	           	<i class="fas fa-edit fa-fw" style="color: green; margin-right: 4px;"/>
+	           	<h:outputText class="text-success" value="#{uiconsts['editButtonLabel']}" />
+           	</h:panelGroup>
+           </h:commandLink>
+           &#160;
+           	<h:commandLink 
+             onclick="if (!confirm('#{uiconsts.rus}')) return false"
+             action="#{interviewController.deleteInterview(interview.id)}" >
+             <h:panelGroup layout="inline" style="display: flex; align-items: center;">
+	             <i class="fas fa-trash fa-fw" style="color: red; margin-right: 4px;"/>
+	             <h:outputText style="color: red" value="#{uiconsts['deleteButtonLabel']}" />
+             </h:panelGroup>
+            </h:commandLink>
+             &#160;
+
+         </h:column>
+          <h:column>
+           	<f:facet name="header">#{uiconsts['columnLabel_Download']}</f:facet>
+           	
+           	
+       		<h:commandLink 
+             action="#{interviewController.downloadInterview(interview.id)}">
+              <h:panelGroup layout="inline" style="display: flex; align-items: center;">
+             <i class="fa fa-download" aria-hidden="true"></i>
+             <h:outputText  value="#{uiconsts['downloadInterviewButtonLabel']}"/>
+             </h:panelGroup>
+             </h:commandLink>
+              &#160;
+        
+        	<h:commandLink 
+             action="#{interviewController.downloadSummary(interview.id)}" 
+             disabled="#{empty interview.summary}">
+              <h:panelGroup layout="inline" style="display: flex; align-items: center;">
+              <i class="fa fa-download" aria-hidden="true"> </i>
+             <h:outputText  value="#{uiconsts['downloadSummaryButtonLabel']}"/>
+             </h:panelGroup>
+             </h:commandLink>
+        
+             
+         </h:column>
+     
+		
+         <!--  <f:facet name="caption">#{uiconsts['listCaption']} - Created by:  #{uiconsts['footer.studentname']} #{uiconsts['footer.studentnumber']} #{uiconsts['footer.labsection']}</f:facet>
+      -->  
+      </h:dataTable>
+    </h:form> 
+   
+      
+  </h:body>
+</html>

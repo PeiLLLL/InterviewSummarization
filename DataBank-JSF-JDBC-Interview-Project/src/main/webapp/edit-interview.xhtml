@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+  >
+  <!-- View that edits existing Interview -->
+
+  <h:head>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		crossorigin="anonymous" />
+	<link href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
+		type="text/css" rel="stylesheet" crossorigin="anonymous" />
+	<link
+		href="https://unpkg.com/bootstrap@4.5.2/dist/css/bootstrap.min.css"
+		type="text/css" rel="stylesheet" crossorigin="anonymous" />
+	<script
+		src="https://unpkg.com/bootstrap@4.5.2/dist/js/bootstrap.min.js"
+		crossorigin="anonymous" />
+    <!-- Title of tab/window in browser -->
+    <title>#{uiconsts['updateLabel']}</title>
+     <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .form-container {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        height: flex; /* Full viewport height */
+      }
+      h2 {
+        color: #333;
+        text-align: center;
+      }
+      h:form {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      
+      th {
+        background-color: #007BFF;
+        color: #fff;
+        padding: 12px;
+        text-align: left;
+      }
+      td {
+        padding: 12px;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+         /* Container styling */
+      .container {
+        
+        max-width: flex;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .button {
+        background-color: #007BFF;
+        border: none;
+        color: white;
+        padding: 10px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+      .content-column {
+        width: 300px; 
+        word-wrap: break-word; 
+      }
+      caption {
+        margin: 10px 0;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+       .left {
+	    margin-right: auto; /* Pushes the button to the left */
+	    flex-shrink: 0; /* Prevents the button from shrinking */
+	}
+	
+	.right {
+	    margin-left: auto; /* Pushes the button to the right */
+	    flex-shrink: 0; /* Prevents the button from shrinking */
+	}
+    </style>
+  </h:head>
+  <h:body>
+    <h2>#{uiconsts['updateLabel']}</h2>
+    <br/>
+    <div class="form-container">
+    <h:form class="container">
+
+	 
+	    <div >
+	    <h:outputText value="#{uiconsts['columnLabel_LastName']}" />
+	    <h:panelGroup class="input-group">
+	    <h:inputText value="#{editInterview.lastName}" styleClass="form-control placeholder-darkgray"/>
+		</h:panelGroup>
+		<br />
+		
+	    <h:outputText value="#{uiconsts['columnLabel_FirstName']}" />
+	    <h:inputText value="#{editInterview.firstName}" styleClass="form-control placeholder-darkgray"/>
+	    
+	    <br />
+	    
+	    <h:outputText value="#{uiconsts['columnLabel_Email']}" />
+	    <h:inputText value="#{editInterview.email}" styleClass="form-control placeholder-darkgray"/>
+	    
+	    <br />
+	     <h:outputText value="#{uiconsts['columnLabel_PhoneNumber']}" />
+	    <h:inputText value="#{editInterview.phoneNumber}" styleClass="form-control placeholder-darkgray"/>
+	    
+	    <br />
+
+	     <h:outputText value="#{uiconsts['columnLabel_Specialty']}" />
+    	<h:selectOneMenu value="#{editInterview.specialty}" styleClass="form-control placeholder-darkgray">
+        <f:selectItems value="#{interviewController.specialties}" var="specialty"
+                       itemLabel="#{specialty}" itemValue="#{specialty}"  />
+    	</h:selectOneMenu>
+    	<br />
+	    
+	     <h:outputText value="#{uiconsts['columnLabel_Content']}" />
+	    <!--  <h:outputText value="#{editInterview.content}" styleClass="form-control placeholder-darkgray"/>-->
+	    <h:outputText value="cannot be edited" styleClass=" placeholder-darkgray"/>
+	    
+	    <br />
+	    
+	     <h:outputText value="#{uiconsts['columnLabel_Summary']}" />
+	   <!--   <h:outputText value="#{editInterview.summary}" styleClass="form-control placeholder-darkgray"/>-->
+	    <h:outputText value="cannot be edited" styleClass=" placeholder-darkgray"/>
+	    <!-- actions -->
+	    <br />
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+	    <h:commandLink value="#{uiconsts['editButtonLabel2']}"
+	    	action="#{interviewController.submitUpdatedInterview(editInterview)}" 
+	    	styleClass="button">
+		    <i class="fas fa-save fa-fw" />
+		   </h:commandLink>
+	        <h:commandLink action="list-interviews.xhtml?faces-redirect=true" value="Cancel" immediate="true">
+
+			  <i class="fas fa-undo fa-fw" />
+			</h:commandLink>
+    </div>
+    </div>
+    </h:form>
+   </div>
+  </h:body>
+</html>

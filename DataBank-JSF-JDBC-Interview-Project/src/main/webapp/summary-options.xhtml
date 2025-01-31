@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+  
+  <!-- Summary Option Page View -->
+
+  <h:head>
+    <title>Summary Options</title>
+    <link href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"
+          rel="stylesheet" crossorigin="anonymous" />
+    <h:outputStylesheet name="primefaces.css" />
+    <h:outputScript name="primefaces.js" />
+    <style>
+      /* Styles for consistent design with list-interview page */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      /* Container styling */
+      .container {
+        display: flex;
+        max-width: flex;
+        margin: 40px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+	/* Left column for result display */
+      .result-column {
+        flex: 1;
+        padding-right: 20px;
+        border-right: 1px solid #ccc;
+      }
+
+      /* Right column for options */
+      .options-column {
+        flex: 1;
+        padding-left: 20px;
+      }
+     
+
+      /* Text area for long input */
+      .textarea {
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+      }
+
+      /* Panel for options */
+      .option-panel {
+        margin-top: 20px;
+      }
+
+      /* Buttons styling */
+      .button {
+        background-color: #007BFF;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        margin-bottom: 10px;
+          padding:20px;
+      }
+
+      .button:hover {
+        background-color: #0056b3;
+
+      }
+
+      /* Submit button styling */
+      .submit-button {
+        background-color: #f44336;
+        color: white;
+        width: 100%;
+        margin-top: 20px;
+      
+      }
+	 
+   
+    </style>
+  </h:head>
+  
+  <h:body>
+    <h2>Select Summary Options</h2>
+    <h:form>
+		<h:commandLink value="Back to all interview" styleClass="button" action="list-interviews.xhtml?faces-redirect=true" />
+
+		
+	<div class="container">
+		<div class="result-column">
+	       	<h3>Generated summary</h3>
+	       	
+        	<h:panelGroup class="input-group">
+          	<h:outputText id="resultContainer" 
+                 value="#{selectedInterview.summary}" 
+                 escape="false" 
+                 rendered="#{not empty selectedInterview.summary}"
+                 rows="50" 
+                 cols="110" />
+
+			<!-- Display message when no summary exists -->
+  			<h:outputText value="There is no summary available.Please generate a summary using your prferred prompt!" 
+                rendered="#{empty selectedInterview.summary}" 
+                style="color: #888; font-style: italic;" />
+        	</h:panelGroup>
+        	
+       </div>
+			<br />
+	  <!-- Right column for options -->
+        <div class="options-column">
+         
+        <h3>Regenerate summary:</h3>
+              <h:outputLabel for="inputField" value="Enter Text: " />
+            
+            <!-- Textarea for long input -->
+			<h:inputTextarea id="inputField" value="#{selectedInterview.customPrompt}" rows="10" cols="50" styleClass="textarea"/>
+ 			 <h:commandButton value="Generate with Custom Prompt" action="#{interviewController.selectPrompt(selectedInterview.id, 'Custom')}" 
+                         styleClass="button" >
+        <f:ajax render="summaryDisplay" execute="@form" />
+                         
+                         </h:commandButton>
+             
+             <h:panelGroup layout="block">
+                <h:outputLabel value="Here are two predefined prompts" />
+                
+                <!-- Button for Prompt 1 -->
+                <h:commandButton value="Generate with Prompt 1" 
+                                 action="#{interviewController.selectPrompt(selectedInterview.id,'Prompt 1')}" 
+                                 styleClass="button"
+                      >
+        <f:ajax render="summaryDisplay" execute="@form" />
+                         </h:commandButton>
+                                 
+
+                <!-- Button for Prompt 2 -->
+                <h:commandButton value="Generate with Prompt 2" 
+                                 action="#{interviewController.selectPrompt(selectedInterview.id,'Prompt 2')}" 
+                                 styleClass="button" 
+                       >
+        <f:ajax render="summaryDisplay" execute="@form" />
+                         </h:commandButton>
+            </h:panelGroup>
+			<br />
+            </div>  
+            </div> 
+           <!-- Place the dialog here, either at the end of the form or inside a panel group -->
+    
+
+        </h:form>
+       
+  </h:body>
+</html>
